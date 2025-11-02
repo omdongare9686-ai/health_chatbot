@@ -1,0 +1,9 @@
+=== Health Chatbot Report ===
+Date: 2025-10-22 13:56:40
+Patient Name: Umesh 
+Age: 63
+Gender: m
+
+User Input: i have fever,headache,jointpain,
+Predicted Disease: COVID-19
+=================================

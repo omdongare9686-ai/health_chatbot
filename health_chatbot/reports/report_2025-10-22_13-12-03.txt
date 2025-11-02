@@ -1,0 +1,23 @@
+=== Health Disease Prediction Report ===
+Date: 2025-10-22 13:12:03
+Model: RandomForestClassifier (random_state=42)
+Model test accuracy: 1.00
+
+Symptoms provided:
+  - fever: Yes
+  - headache: Yes
+  - nausea: Yes
+  - vomiting: No
+  - fatigue: Yes
+  - joint_pain: No
+  - cough: No
+  - chills: No
+  - sore_throat: No
+  - rash: No
+  - diarrhea: No
+  - loss_of_appetite: No
+  - muscle_pain: No
+
+Prediction:
+  Predicted disease: Typhoid
+=======================================

@@ -1,0 +1,30 @@
+=== Patient Health Report / Prescription ===
+Date: 2025-10-22 13:14:38
+
+Patient Information:
+  Name   : UMESH DONGARE
+  Age    : 21
+  Gender : M
+  Contact: 8669338207
+
+Symptoms Provided:
+  - fever: Yes
+  - headache: Yes
+  - nausea: Yes
+  - vomiting: No
+  - fatigue: Yes
+  - joint_pain: No
+  - cough: No
+  - chills: No
+  - sore_throat: No
+  - rash: No
+  - diarrhea: No
+  - loss_of_appetite: No
+  - muscle_pain: No
+
+Predicted Disease: Typhoid
+
+Doctor Notes / Recommendations:
+  - Please consult a healthcare professional for confirmation.
+  - Follow prescribed treatment and care guidelines.
+============================================

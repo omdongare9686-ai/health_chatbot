@@ -1,0 +1,15 @@
+Name,Age,Gender, symptoms,Predicted Disease,
+umesh,21,m,"fever jointpain,headache",Unknown Disease,
+umesh,5,m,"feaver,headache,fatigue",Unknown Disease,
+sdf,sd,df,"fever,headache,fatigue",Unknown Disease,
+gh,fg,dgh,"fever,headache,jointpain,fatigue",Unknown Disease,
+adv,fgn,sh,"fever,headache,fatigue",COVID-19,
+sgf,sdg,sdg,"fever,headache,fatigue",Typhoid,
+df,sdf,sdf,"fever,headache,fatigue,",Typhoid,
+umesh ,12,m,"fever,headache,fatigue",Typhoid,
+laljit,23,m,"fever,headache,fatigue",Dengue,
+Laleet,200,m,"fever,fatigue,nautia",Typhoid
+2025-11-01 20:13:15,Umesh Dongare,27,m,"fatigue, fever, headache",COVID-19
+2025-11-01 20:17:57,Umesh Dongare,27,m,"headache, nausea, fever",COVID-19
+2025-11-02 09:52:37,Umesh Dongare,27,sdg,"fever, fatigue, headache",COVID-19
+2025-11-02 09:58:16,Umesh Dongare 72,21,m,"fatigue, fever, headache, joint pain",COVID-19

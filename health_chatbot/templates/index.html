@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health AI Chatbot</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f7f7f8;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        .header {
+            background: white;
+            border-bottom: 1px solid #e5e5e6;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-shrink: 0;
+        }
+        
+        .header-content {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .header h1 {
+            font-size: 18px;
+            font-weight: 600;
+            color: #202123;
+            margin: 0;
+        }
+        
+        .header-icon {
+            width: 24px;
+            height: 24px;
+            background: #10a37f;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 14px;
+        }
+        
+        .patient-info {
+            background: white;
+            padding: 12px 16px;
+            border-bottom: 1px solid #e5e5e6;
+            display: flex;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+        
+        .patient-info input {
+            flex: 1;
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        
+        .patient-info input:focus {
+            border-color: #10a37f;
+        }
+        
+        .patient-info input::placeholder {
+            color: #9ca3af;
+        }
+        
+        #chat-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            scroll-behavior: smooth;
+        }
+        
+        .message {
+            display: flex;
+            gap: 16px;
+            max-width: 85%;
+            animation: fadeIn 0.3s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .message.user {
+            align-self: flex-end;
+            flex-direction: row-reverse;
+        }
+        
+        .message-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 4px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        .message.user .message-avatar {
+            background: #10a37f;
+            color: white;
+        }
+        
+        .message.bot .message-avatar {
+            background: #5436da;
+            color: white;
+        }
+        
+        .message-content {
+            background: white;
+            padding: 12px 16px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            line-height: 1.6;
+            word-wrap: break-word;
+        }
+        
+        .message.user .message-content {
+            background: #10a37f;
+            color: white;
+        }
+        
+        .message.bot .message-content {
+            color: #202123;
+        }
+        
+        .message-content strong {
+            font-weight: 600;
+        }
+        
+        .message-content p {
+            margin: 8px 0;
+        }
+        
+        .message-content p:first-child {
+            margin-top: 0;
+        }
+        
+        .message-content p:last-child {
+            margin-bottom: 0;
+        }
+        
+        .typing-indicator {
+            display: flex;
+            gap: 16px;
+            max-width: 85%;
+        }
+        
+        .typing-dots {
+            background: white;
+            padding: 12px 16px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            display: flex;
+            gap: 4px;
+        }
+        
+        .typing-dots span {
+            width: 8px;
+            height: 8px;
+            background: #9ca3af;
+            border-radius: 50%;
+            animation: typing 1.4s infinite;
+        }
+        
+        .typing-dots span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        
+        .typing-dots span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+        
+        @keyframes typing {
+            0%, 60%, 100% {
+                transform: translateY(0);
+                opacity: 0.7;
+            }
+            30% {
+                transform: translateY(-10px);
+                opacity: 1;
+            }
+        }
+        
+        .input-container {
+            background: white;
+            border-top: 1px solid #e5e5e6;
+            padding: 12px 16px;
+            flex-shrink: 0;
+        }
+        
+        .input-wrapper {
+            max-width: 768px;
+            margin: 0 auto;
+            display: flex;
+            gap: 12px;
+            align-items: flex-end;
+        }
+        
+        #user-input {
+            flex: 1;
+            padding: 12px 16px;
+            border: 1px solid #d1d5db;
+            border-radius: 24px;
+            font-size: 16px;
+            outline: none;
+            resize: none;
+            max-height: 200px;
+            font-family: inherit;
+            transition: border-color 0.2s;
+            line-height: 1.5;
+        }
+        
+        #user-input:focus {
+            border-color: #10a37f;
+        }
+        
+        #user-input:disabled {
+            background: #f3f4f6;
+            cursor: not-allowed;
+        }
+        
+        #send-btn {
+            padding: 12px 24px;
+            background: #10a37f;
+            color: white;
+            border: none;
+            border-radius: 24px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s;
+            flex-shrink: 0;
+            height: 48px;
+        }
+        
+        #send-btn:hover:not(:disabled) {
+            background: #0d8968;
+        }
+        
+        #send-btn:disabled {
+            background: #d1d5db;
+            cursor: not-allowed;
+        }
+        
+        #download-report {
+            display: none;
+            margin: 12px auto 0;
+            padding: 10px 20px;
+            background: #5436da;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        #download-report:hover {
+            background: #4329b8;
+        }
+        
+        .empty-state {
+            text-align: center;
+            color: #9ca3af;
+            margin-top: 60px;
+        }
+        
+        @media (max-width: 768px) {
+            .message {
+                max-width: 95%;
+            }
+            
+            .patient-info {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <div class="header-icon">🩺</div>
+            <h1>Health AI Assistant</h1>
+        </div>
+    </div>
+    
+    <div class="patient-info">
+        <input type="text" id="name" placeholder="Your Name">
+        <input type="text" id="age" placeholder="Age">
+        <input type="text" id="gender" placeholder="Gender (M/F)">
+    </div>
+    
+    <div id="chat-container"></div>
+    
+    <div class="input-container">
+        <div class="input-wrapper">
+            <textarea id="user-input" placeholder="Describe how you're feeling or ask a question..." rows="1" disabled></textarea>
+            <button id="send-btn" disabled>Send</button>
+        </div>
+        <div style="text-align: center;">
+            <button id="download-report">Download Report</button>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        // Wait for both jQuery and DOM to be ready
+        (function() {
+            function initApp() {
+                // Check if jQuery is loaded
+                if (typeof jQuery === 'undefined') {
+                    console.warn('jQuery not loaded yet, waiting...');
+                    setTimeout(arguments.callee, 50);
+                    return;
+                }
+                
+                // Wait for DOM to be ready
+                jQuery(document).ready(function($) {
+                    let sessionId = null;
+                    let isTyping = false;
+                    
+                    // Format message with markdown-like support
+                    function formatMessage(text) {
+                        // Convert **text** to <strong>text</strong>
+                        text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+                        // Convert newlines to <p> tags
+                        let paragraphs = text.split('\n\n');
+                        return paragraphs.map(p => {
+                            if (p.trim()) {
+                                return '<p>' + p.trim().replace(/\n/g, '<br>') + '</p>';
+                            }
+                            return '';
+                        }).filter(p => p).join('');
+                    }
+                    
+                    function addMessage(content, isUser = false) {
+                        const chatContainer = $('#chat-container');
+                        
+                        // Remove empty state if exists
+                        chatContainer.find('.empty-state').remove();
+                        
+                        const messageDiv = $('<div>').addClass('message').addClass(isUser ? 'user' : 'bot');
+                        const avatar = $('<div>').addClass('message-avatar').text(isUser ? 'U' : 'AI');
+                        const messageContent = $('<div>').addClass('message-content');
+                        
+                        if (isUser) {
+                            messageContent.text(content);
+                        } else {
+                            messageContent.html(formatMessage(content));
+                        }
+                        
+                        messageDiv.append(avatar);
+                        messageDiv.append(messageContent);
+                        chatContainer.append(messageDiv);
+                        
+                        // Scroll to bottom
+                        chatContainer.scrollTop(chatContainer[0].scrollHeight);
+                    }
+                    
+                    function showTypingIndicator() {
+                        if (isTyping) return;
+                        isTyping = true;
+                        const chatContainer = $('#chat-container');
+                        const typingDiv = $('<div>').addClass('typing-indicator');
+                        const avatar = $('<div>').addClass('message-avatar').text('AI');
+                        const dots = $('<div>').addClass('typing-dots');
+                        dots.append($('<span>'));
+                        dots.append($('<span>'));
+                        dots.append($('<span>'));
+                        typingDiv.append(avatar);
+                        typingDiv.append(dots);
+                        chatContainer.append(typingDiv);
+                        chatContainer.scrollTop(chatContainer[0].scrollHeight);
+                    }
+                    
+                    function hideTypingIndicator() {
+                        isTyping = false;
+                        $('#chat-container .typing-indicator').remove();
+                    }
+                    
+                    function sendMessage() {
+                        const message = $('#user-input').val().trim();
+                        const name = $('#name').val().trim();
+                        const age = $('#age').val().trim();
+                        const gender = $('#gender').val().trim();
+                        
+                        if (!message || !name || !age || !gender) return;
+                        
+                        // Add user message
+                        addMessage(message, true);
+                        
+                        // Clear input
+                        $('#user-input').val('');
+                        $('#user-input').css('height', 'auto');
+                        
+                        // Disable input while processing
+                        $('#user-input').prop('disabled', true);
+                        $('#send-btn').prop('disabled', true);
+                        
+                        // Show typing indicator
+                        showTypingIndicator();
+                        
+                        // Send to backend
+                        $.ajax({
+                            url: '/predict',
+                            type: 'POST',
+                            contentType: 'application/json',
+                            data: JSON.stringify({
+                                message: message,
+                                name: name,
+                                age: age,
+                                gender: gender,
+                                session_id: sessionId
+                            }),
+                            success: function(data) {
+                                hideTypingIndicator();
+                                
+                                if (data.session_id) {
+                                    sessionId = data.session_id;
+                                }
+                                
+                                if (data.response) {
+                                    addMessage(data.response, false);
+                                    
+                                    if (data.show_download) {
+                                        $('#download-report').show();
+                                    }
+                                }
+                                
+                                // Re-enable input
+                                $('#user-input').prop('disabled', false);
+                                $('#send-btn').prop('disabled', false);
+                                $('#user-input').focus();
+                            },
+                            error: function(xhr, status, error) {
+                                hideTypingIndicator();
+                                
+                                // Try to get error message from response
+                                let errorMessage = "I'm sorry, I encountered an error. Please try again.";
+                                try {
+                                    if (xhr.responseJSON && xhr.responseJSON.response) {
+                                        errorMessage = xhr.responseJSON.response;
+                                    } else if (xhr.responseText) {
+                                        const response = JSON.parse(xhr.responseText);
+                                        if (response.response) {
+                                            errorMessage = response.response;
+                                        }
+                                    }
+                                } catch (e) {
+                                    // Use default message if parsing fails
+                                    console.error('Error parsing response:', e);
+                                }
+                                
+                                addMessage(errorMessage, false);
+                                console.error('AJAX error details:', {
+                                    status: xhr.status,
+                                    statusText: xhr.statusText,
+                                    response: xhr.responseText,
+                                    error: error
+                                });
+                                
+                                // Re-enable input
+                                $('#user-input').prop('disabled', false);
+                                $('#send-btn').prop('disabled', false);
+                            }
+                        });
+                    }
+                    
+                    // Auto-resize textarea
+                    $('#user-input').on('input', function() {
+                        this.style.height = 'auto';
+                        this.style.height = Math.min(this.scrollHeight, 200) + 'px';
+                    });
+                    
+                    // Initial greeting
+                    addMessage("Hello! 👋 I'm your Health AI Assistant. I'm here to help you understand your symptoms and provide health insights. Please fill in your name, age, and gender to get started.", false);
+                    
+                    // Enable input after patient info
+                    $('#name, #age, #gender').on('input', function() {
+                        const name = $('#name').val().trim();
+                        const age = $('#age').val().trim();
+                        const gender = $('#gender').val().trim();
+                        if (name && age && gender) {
+                            $('#user-input').prop('disabled', false);
+                            $('#send-btn').prop('disabled', false);
+                            $('#user-input').focus();
+                            if (!$('#chat-container .message').length || $('#chat-container .message').length === 1) {
+                                addMessage(`Great! Thank you for providing your information, ${name}! 😊 How are you feeling today? You can describe any symptoms you're experiencing, or just say hello to start a conversation!`, false);
+                            }
+                            $('#name, #age, #gender').off('input');
+                        }
+                    });
+                    
+                    // Send button click
+                    $('#send-btn').click(sendMessage);
+                    
+                    // Enter key (but allow Shift+Enter for new line)
+                    $('#user-input').on('keydown', function(e) {
+                        if (e.key === 'Enter' && !e.shiftKey) {
+                            e.preventDefault();
+                            sendMessage();
+                        }
+                    });
+            
+                    // Download report
+                    $('#download-report').click(function() {
+                        window.location.href = '/download_report';
+                    });
+                }); // End of jQuery ready
+            } // End of initApp function
+            
+            // Start initialization
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initApp);
+            } else {
+                initApp();
+            }
+        })();
+    </script>
+</body>
+</html>

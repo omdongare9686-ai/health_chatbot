@@ -1,0 +1,27 @@
+=== Patient Health Report / Chatbot ===
+Date: 2025-10-22 13:22:14
+
+Patient Name: OM
+Age: 20
+Gender: M
+
+Symptoms Provided:
+  - fever: Yes
+  - headache: Yes
+  - nausea: Yes
+  - vomiting: No
+  - fatigue: Yes
+  - joint_pain: No
+  - cough: No
+  - chills: No
+  - sore_throat: No
+  - rash: No
+  - diarrhea: No
+  - loss_of_appetite: No
+  - muscle_pain: No
+
+Predicted Disease: Typhoid
+
+Doctor Notes / Recommendations:
+  - Please consult a healthcare professional for confirmation.
+========================================
